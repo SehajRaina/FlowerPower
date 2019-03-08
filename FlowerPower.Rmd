@@ -127,7 +127,11 @@ qplot(x=NMDS1,y=NMDS2,shape=Population, colour=Location, alpha=I(0.8),data=PDat)
 
 <br>
 
-####
+#####Figures 1, 2 and 3 show that the presence of an invasive plant called garlic mustard (Alliaria petiolata) INSIDE vs. OUTSIDE a quadrate DOES change the plant community. There is clustering (based on similarity and dissimilarity) that occurs amongst plant communities exposed to garlic mustard (INSIDE location) and clustering amongst plant communities NOT exposed to garlic mustard (OUTSIDE location). When looking at figure 3 NMDS-based clustering, there is also clustering that occurs amongst inside and outside plant communities for different quadrates. 
+
+#####When we look at Figures 4, 5 and 6, we can see that the sampling population also has a strong effect on plant communities because the clustering on similarity and dissimilarity trees in figures 4 and 5 show clearer distinctions amongst populations of plant communities. Furthermore, we see the same strong clustering pattern in Figure 6. 
+#####Figure 7 shows that when comparing the effects of location AND population on the distribution of plant communities, population seems to have a stronger effect than the absence/presence of garlic mustard, because the clusters based on sampling populations is tighter and much less uniformly distributed. 
+
 
 
 
