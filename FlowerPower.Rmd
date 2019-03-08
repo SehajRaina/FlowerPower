@@ -1,0 +1,134 @@
+---
+title: "FlowerPower"
+author: "Sehaj Raina"
+date: "March 7, 2019"
+output: html_document
+---
+
+<br><br>
+
+1. Load packages
+```{r}
+suppressMessages(library(vegan))
+suppressMessages(library(ape))
+suppressMessages(library(ggplot2))
+suppressMessages(library(ggtree))
+```
+
+<br>
+
+2. Importing and data wrangling 
+```{r}
+samples<-read.csv("flower.csv")
+
+#change population from continuous to a categorical variable 
+str(samples$Population)
+samples$Population<-as.factor(samples$Population)
+
+samples1<-read.csv("flower.csv", header=T, row.names="Quadrate")
+
+table1<- samples1[, -c(1:5)] #do not need these columns for analysis 
+
+x<-rowSums(table1)
+sum(x)
+Drop<-rowSums(table1) < 1
+sum(Drop) #nothing to drop
+```
+
+<br>
+
+3. Visualization by Location - Binary Distance Matrix
+```{r}
+table1_bin<-table1 #convert to binary
+table1_bin[table1_bin>0]<-1
+
+table1_bin_dist<-dist(table1_bin, method="binary")
+
+table1_tree<-nj(table1_bin_dist)
+ggtree(table1_tree, layout="rectangular") %<+% samples + 
+  geom_tiplab(aes(colour=Location)) + 
+  theme(legend.position="right")
+```
+
+### __Figure 1.__ *Binary Distance Matrix Tree by Location*
+
+<br>
+
+4. Visualization by Location - Dissimilarity
+```{r}
+table1_dist<- vegdist(table1) #use the data WE DIDNT transform to binary
+
+table1_tree2<-nj(table1_dist)
+ggtree(table1_tree2,layout="rectangular") %<+% samples + 
+  geom_tiplab(aes(color=Location)) + 
+  theme(legend.position="right")
+```
+
+### __Figure 2.__ *Dissimilarity Tree by Location*
+
+<br>
+
+5. Visualization by Location - NMDS
+```{r}
+NMDSdat<-metaMDS(table1_dist, k=2)
+
+PDat<-data.frame(NMDS1=NMDSdat$point[,1],
+                 NMDS2=NMDSdat$point[,2],
+                 Quadrate=row.names(table1))
+ 
+PDat<-merge(PDat,samples,by="Quadrate",all.x=T,all.y=F) #join data sets 
+
+qplot(x=NMDS1,y=NMDS2,colour=Location,alpha=I(0.8),data=PDat)+theme_bw()
+```
+
+### __Figure 3.__ *Non-Metric Multidimensional Scaling (NMDS) by Location*
+
+<br>
+
+6. Visualization by Population - Binary Distance Matrix
+```{r}
+table3_tree<-nj(table1_bin_dist)
+ggtree(table3_tree, layout="rectangular") %<+% samples + 
+  geom_tiplab(aes(colour=Population)) + 
+  theme(legend.position="right") 
+```
+
+### __Figure 4.__ *Binary Distance Matrix Tree by Population*
+
+<br>
+
+7. Visualization by Population - Dissimilarity
+```{r}
+table4_tree2<-nj(table1_dist)
+ggtree(table1_tree2,layout="rectangular") %<+% samples + 
+  geom_tiplab(aes(color=Population)) + 
+  theme(legend.position="right")
+```
+
+### __Figure 5.__ *Dissimilarity Tree by Population*
+
+<br>
+
+8. Visualization by Population - NMDS
+```{r}
+qplot(x=NMDS1,y=NMDS2,colour=Population,alpha=I(0.8),data=PDat)+theme_bw()
+```
+
+### __Figure 6.__ *Non-Metric Multidimensional Scaling (NMDS) by Population*
+
+<br>
+
+9. Visualization by Location and Population - NMDS
+```{r}
+qplot(x=NMDS1,y=NMDS2,shape=Population, colour=Location, alpha=I(0.8),data=PDat)+theme_bw()
+```
+
+### __Figure 7.__ *Non-Metric Multidimensional Scaling (NMDS) by Location and Population*
+
+<br>
+
+####
+
+
+
+
